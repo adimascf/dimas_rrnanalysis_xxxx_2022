@@ -6,5 +6,4 @@ Developed over a series of *code club* episodes led by Pat Schloss to answer an 
 
 ### Dependencies:
 * [mothur v.1.48.0](https://github.com/mothur/mothur/releases/tag/v1.48.0)
-
-I want to write document on ~~Microsoft Word~~ Markdown
+* wget
