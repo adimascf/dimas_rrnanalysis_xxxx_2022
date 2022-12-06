@@ -4,9 +4,11 @@
 # Inputs: name of the file extracted from the archive without the path
 # Outputs: Appropiate data raw
 
-archive=$1
+target=$1
+filename=`echo $target | sed "s/.*\///"`
+path=`echo $target | sed -E "s/(.*\/).*/\1/"`
 
-wget -P data/raw/ -nc https://rrndb.umms.med.umich.edu/static/download/$archive.zip
-unzip -n -d data/raw/ data/raw/$archive.zip
+wget -P "$path" -nc https://rrndb.umms.med.umich.edu/static/download/"$filename".zip
+unzip -n -d "$path" "$target".zip
 
-touch data/raw/$archive
+touch "$target"
