@@ -18,7 +18,7 @@ then
 
 elif [[ "$region" = "v4" ]]
 then
-    start=3862
+    start=13862
     end=23444
     echo "region: $region"
 
