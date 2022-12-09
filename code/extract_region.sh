@@ -50,7 +50,7 @@ filter.seqs(vertical=TRUE)"
 # coordinates
 if [[ $? -eq 0 ]]
 then
-    sed "s/^\.*/-/" $path/rrnDB-5.8_16S_rRNA.pcr.filter.fasta > $path/rrnDB-5.8_16S_rRNA.pcr.filter.test.fasta
+    sed "s/^\.+/-/" $path/rrnDB-5.8_16S_rRNA.pcr.filter.fasta > $path/rrnDB-5.8_16S_rRNA.pcr.filter.test.fasta
     touch $path/rrnDB-5.8_16S_rRNA.bad.accnos
     touch $path/rrnDB-5.8_16S_rRNA.scrap.pcr.align
 else
