@@ -31,3 +31,11 @@ data/%/rrnDB.align data/%/rrnDB.bad.accnos : code/extract_region.sh \
 											data/raw/rrnDB-5.8_16S_rRNA.fasta \
 											code/mothur/mothur
 	code/extract_region.sh $@
+
+
+data/%/rrnDB.unique.align data/%/data.count_table : code/count_unique_seqs.sh \
+												data/%/rrnDB.align \
+												code/mothur/mothur
+	code/count_unique_seqs.sh $@
+
+
