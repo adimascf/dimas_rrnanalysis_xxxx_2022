@@ -35,4 +35,4 @@ rm $STUB_TEMP.full.count_table
 rm $STUB_TEMP.names
 rm $STUB_TEMP.groups
 rm $STUB_TEMP.align
-rm $STUB_TEMP.count_table
+rm $STUB.count_table
