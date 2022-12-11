@@ -40,5 +40,6 @@ data/%/rrnDB.unique.align data/%/rrnDB.count_tibble : code/count_unique_seqs.sh 
 	code/count_unique_seqs.sh $@
 
 
-
+README.md : README.Rmd
+	R -e "library(rmarkdown); render('README.Rmd')"
 
