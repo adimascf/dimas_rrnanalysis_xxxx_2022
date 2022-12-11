@@ -20,26 +20,32 @@ data/raw/rrnDB-5.6_pantaxa_stats_NCBI.tsv : code/get_rrndb_files.sh
 data/raw/rrnDB-5.6_pantaxa_stats_RDP.tsv : code/get_rrndb_files.sh
 	code/get_rrndb_files.sh $@
 
-data/raw/rrnDB-5.6_16S_rRNA.align : data/references/silva_seed/silva.seed_v138_1.align \
-									data/raw/rrnDB-5.6_16S_rRNA.fasta \
-									code/align_sequences.sh \
+data/raw/rrnDB-5.6_16S_rRNA.align : data/references/silva_seed/silva.seed_v138_1.align\
+									data/raw/rrnDB-5.6_16S_rRNA.fasta\
+									code/align_sequences.sh\
 									code/mothur/mothur
 	code/align_sequences.sh
 
 
-data/%/rrnDB.align data/%/rrnDB.bad.accnos : code/extract_region.sh \
-											data/raw/rrnDB-5.6_16S_rRNA.fasta \
+data/%/rrnDB.align data/%/rrnDB.bad.accnos : code/extract_region.sh\
+											data/raw/rrnDB-5.6_16S_rRNA.fasta\
 											code/mothur/mothur
 	code/extract_region.sh $@
 
 
-data/%/rrnDB.unique.align data/%/rrnDB.count_tibble : code/count_unique_seqs.sh \
-												code/convert_count_table_to_tibble.R \
-												data/%/rrnDB.align \
+data/%/rrnDB.unique.align data/%/rrnDB.count_tibble : code/count_unique_seqs.sh\
+												code/convert_count_table_to_tibble.R\
+												data/%/rrnDB.align\
 												code/mothur/mothur
 	code/count_unique_seqs.sh $@
 
 
 README.md : README.Rmd
 	R -e "library(rmarkdown); render('README.Rmd')"
+
+
+exploratory/2022-12-11_genome_sens_spec.md : exploratory/2022-12-11_genome_sens_spec.Rmd\
+												data/v19/rrnDB.count_tibble\
+												data/v4/rrnDB.count_tibble
+	R -e "library(rmarkdown); render('exploratory/2022-12-11_genome_sens_spec.Rmd')"
 
