@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Author: adimascf
-# Dependency: data/raw/rrnDB-5.6_16S_rRNA.fasta
+# Dependency: data/raw/rrnDB-5.6he_16S_rRNA.fasta
 # Input: the target anem, which is really the output
 #       data/<region>/rrnDB.align
 
