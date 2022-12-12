@@ -39,6 +39,9 @@ data/%/rrnDB.unique.align data/%/rrnDB.count_tibble : code/count_unique_seqs.sh\
 												code/mothur/mothur
 	code/count_unique_seqs.sh $@
 
+data/processed/rrnDB.count_tibble : code/combine_count_tibble_files.R data/v19/rrnDB.count_tibble data/v45/rrnDB.count_tibble data/v34/rrnDB.count_tibble data/v4/rrnDB.count_tibble
+	Rscript code/combine_count_tibble_files.R data/v*/rrnDB.count_tibble
+
 
 README.md : README.Rmd
 	R -e "library(rmarkdown); render('README.Rmd')"
@@ -48,4 +51,7 @@ exploratory/2022-12-11_genome_sens_spec.md : exploratory/2022-12-11_genome_sens_
 												data/v19/rrnDB.count_tibble\
 												data/v4/rrnDB.count_tibble
 	R -e "library(rmarkdown); render('exploratory/2022-12-11_genome_sens_spec.Rmd')"
+
+
+
 
