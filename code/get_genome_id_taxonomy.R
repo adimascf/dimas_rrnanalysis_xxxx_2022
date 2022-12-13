@@ -60,7 +60,28 @@ inner_join(metadata, sp_spp_lookup, by="subspecies_id") %>%
     select(genome_id, rdp, scientific_name, species_id) %>%
     inner_join(., tax, by=c("species_id" = "taxid")) %>%
     select(genome_id, rdp, species, scientific_name) %>%
-    write_tsv("data/references/genome_id_taxonomy.tsv")
+    filter(!is.na(rdp)) %>%
+    # select(-species, -scientific_name) %>%
+    mutate(rdp = str_replace(rdp, pattern = ".*\\|\\|\\|.*",
+                            replacement = "NA|domain")) %>%
+     separate(col=rdp, into=c("rdp_a", "rdp_b", "rdp_c", "rdp_d",
+                             "rdp_e", "rdp_f", "rdp_g", "rdp_h"),
+             sep = "; ", fill = "right") %>%
+    pivot_longer(cols = starts_with("rdp_"), names_to = "rank",
+                 values_to = "name") %>%
+    filter(!is.na(name)) %>%
+    separate(name, into = c("taxon_name", "taxon_range"), sep = "\\|",
+             convert = TRUE) %>%
+    select(-rank) %>%
+    mutate(taxon_name = str_replace_all(taxon_name, pattern = '\"',
+                                        replacement = ''),
+           taxon_name = str_replace_all(taxon_name, pattern = ' ',
+                                        replacement = '_')) %>%
+    filter(taxon_range %in% c("domain", "phylum", "class", "order",
+                             "family", "genus")) %>%
+    pivot_wider(names_from = "taxon_range", values_from = "taxon_name") %>%
+    rename(kingdom = domain) %>%
+    write_tsv("data/references/genome_id_rdp_taxonomy.tsv")
 
 
 
