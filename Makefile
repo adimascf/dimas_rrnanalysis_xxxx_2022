@@ -8,13 +8,14 @@ code/mothur/mothur : code/install_mothur.sh
 data/references/silva_seed/silva.seed_v138_1.align : code/get_silva_seed.sh 
 	code/get_silva_seed.sh 
 
-data/references/sp_spp_lookup.tsv : code/get_sp_spp_lookup.sh
-	code/get_sp_spp_lookup.sh
+data/references/ncbi_names_lookup.tsv data/references/ncbi_nodes_lookup.tsv data/references/ncbi_merged_lookup.tsv: code/get_ncbi_tax_lookup.sh
+	code/get_ncbi_tax_lookup.sh
 
-data/references/genome_id_rdp_taxonomy.tsv : code/get_genome_id_taxonomy.R\
+data/references/genome_id_taxonomy.tsv : code/get_genome_id_taxonomy.R\
 										data/raw/rrnDB-5.6.tsv\
-										data/references/sp_spp_lookup.tsv\
-										data/raw/rrnDB-5.6_pantaxa_stats_NCBI.tsv
+										data/references/ncbi_nodes_lookup.tsv\
+										data/references/ncbi_names_lookup.tsv\
+										data/references/ncbi_merged_lookup.tsv
 	Rscript code/get_genome_id_taxonomy.R
 
 
