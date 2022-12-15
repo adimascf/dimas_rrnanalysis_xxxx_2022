@@ -59,15 +59,14 @@ README.md : README.Rmd
 
 
 exploratory/2022-12-11_genome_sens_spec.md : exploratory/2022-12-11_genome_sens_spec.Rmd\
-												data/v19/rrnDB.count_tibble\
-												data/v4/rrnDB.count_tibble
+												data/processed.count_tibble
 	R -e "library(rmarkdown); render('exploratory/2022-12-11_genome_sens_spec.Rmd')"
 
 
-
-
-
-
+exploratory/2022-12-15-taxa_representation.md : exploratory/2022-12-11_genome_sens_spec.Rmd\
+												data/references/genome_id_taxonomy.tsv\
+												data/processed/rrnDB.count_tibble
+	R -e "library(rmarkdown); render('exploratory/2022-12-15-taxa_representation.Rmd')"
 
 
 
