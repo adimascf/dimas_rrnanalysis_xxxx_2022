@@ -28,6 +28,10 @@ averages of each taxonomic group, we should first get an average number
 of copies for each species. This will allow us to control for uneven
 number of genomes in each species.
 
+Bacteria have more copies than Arhchea even after correcting for number
+of genomes per species, there is wide variation in the number of rrn
+operons per taxonomic group.
+
 ``` r
 rank_taxon_rrn <- metadata_asv %>%
     filter(region == "v19") %>%
@@ -45,21 +49,20 @@ rank_taxon_rrn <- metadata_asv %>%
     summarize(mean_rrns = mean(mean_rrns), .groups = "drop") %>%
     drop_na(rank)
 
-mean_of_means <- rank_taxon_rrn %>%
+median_of_means <- rank_taxon_rrn %>%
     group_by(rank) %>%
-    summarize(mean_mean_rrns = mean(mean_rrns), .groups = "drop")
-
+    summarize(median_mean_rrns = median(mean_rrns), .groups = "drop")
 
 jitter_width <- 0.3
-n_ranks <- nrow(mean_of_means)
+n_ranks <- nrow(median_of_means)
 
 rank_taxon_rrn %>%
     ggplot(aes(x=rank, y=mean_rrns)) +
     geom_jitter(width = jitter_width, color="gray") +
-    geom_segment(data=mean_of_means, aes(x=1:n_ranks - jitter_width, 
+    geom_segment(data=median_of_means, aes(x=1:n_ranks - jitter_width, 
                                          xend=1:n_ranks + jitter_width,
-                                         y=mean_mean_rrns, 
-                                         yend=mean_mean_rrns),
+                                         y=median_mean_rrns, 
+                                         yend=median_mean_rrns),
                color="red", size=1.5, group=1,
                lineend = "round",
                inherit.aes = FALSE) +
@@ -80,6 +83,30 @@ rank_taxon_rrn %>%
 
 ![](2022-12-16-rrn-copy-number_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
-Bacteria have more copies than Arhchea even after correcting for number
-of genomes per species, there is wide variation in the number of rrn
-operons per taxonomic group.
+Here is another way looking at the data
+
+``` r
+library(ggridges)
+
+
+rank_taxon_rrn %>%
+    ggplot(aes(y=rank, x=mean_rrns)) +
+    geom_density_ridges(stat = "binline",
+                        binwidth=1,
+                        scale=1) +
+    geom_point(data = median_of_means, aes(x=median_mean_rrns,
+                                           y=1:n_ranks+0.1)) +
+    theme_classic() +
+    labs(y=NULL, 
+         x="Mean number of rrn copies per genome",
+         title = "The distribution rrn copies per genome is pretty consistent across ranks",
+         subtitle = "Each point represent a single taxon\nwithin that range, number base on\nan average species copy number. The dot represets the median for the rank") +
+    scale_y_discrete(breaks=c("kingdom", "phylum", "class",
+                                    "order", "family", "genus",
+                                    "species"),
+                     labels=c("Kingdom", "Phylum", "Class",
+                                    "Order", "Family", "Genus",
+                                    "Species"))
+```
+
+![](2022-12-16-rrn-copy-number_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
