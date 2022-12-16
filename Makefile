@@ -69,4 +69,9 @@ exploratory/2022-12-15-taxa_representation.md : exploratory/2022-12-11_genome_se
 	R -e "library(rmarkdown); render('exploratory/2022-12-15-taxa_representation.Rmd')"
 
 
+exploratory/2022-12-16-rrn-copy-number.md : exploratory/2022-12-16-rrn-copy-number.Rmd\
+											data/references/genome_id_taxonomy.tsv\
+											data/processed/rrnDB.count_tibble
+	R -e "library(rmarkdown); render('exploratory/2022-12-16-rrn-copy-number.Rmd')"
+
 
