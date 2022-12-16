@@ -13,10 +13,7 @@ Developed over a series of *code club* episodes led by Pat Schloss to answer an 
 
 -   Within a genome, how many distinct sequences of the 16S rRNA gene were present relative to the number of copies per genome? Ho far aprt are these seuences from each other? How does this scale from a genome to kingdoms?
 -   Within a taxa (any level), how many ASVs from that taxa are shared with sister taxa? How does this cahnge with taxonomic level? Variable region?
--   Make sure we have taxonomic data for all of our genomes
--   Read .fasta files into R (do it on our own)
--   `inner_join` with .tsv file
--   `group_by` / `summarize` to count number of sequences and copies per genome
+
 
 ```{r library_calls, include=FALSE}
 library(tidyverse)
