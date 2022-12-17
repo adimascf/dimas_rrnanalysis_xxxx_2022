@@ -75,3 +75,8 @@ exploratory/2022-12-16-rrn-copy-number.md : exploratory/2022-12-16-rrn-copy-numb
 	R -e "library(rmarkdown); render('exploratory/2022-12-16-rrn-copy-number.Rmd')"
 
 
+exploratory/2022-12-17-asv-species-coverage.md : exploratory/2022-12-17-asv-species-coverage.Rmd\
+												data/references/genome_id_taxonomy.tsv\
+												data/processed/rrnDB.count_tibble
+	R -e "library(rmarkdown); render('exploratory/2022-12-17-asv-species-coverage.Rmd')"
+
