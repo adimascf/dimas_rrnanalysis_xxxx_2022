@@ -6,6 +6,7 @@ adimascf
 ``` r
 library(tidyverse)
 library(here)
+library(knitr)
 
 metadata <- read_tsv(here("data/references/genome_id_taxonomy.tsv"),
                      col_types = cols(.default = col_character())) %>%
@@ -41,9 +42,10 @@ at the V4, V3, V4-V5.
 # each facet represent a different region
 
 species_asv <- metadata_asv %>%
-    select(genome_id, species, region, asv) %>%
+    select(genome_id, species, region, asv, count) %>%
     group_by(region, species) %>%
     summarize(n_genomes = n_distinct(genome_id), n_asv = n_distinct(asv),
+              n_rrn = sum(count) / n_genomes,
               asv_rate = n_asv/n_genomes,
               .groups = "drop")
 
@@ -67,6 +69,45 @@ species_asv %>%
     ## `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'
 
 ![](2022-12-17-asv-species-coverage_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+
+``` r
+# species name, number of genomes, average number of rrns, number of ASVs 
+# across genomes for each region of 16S rRNA gene.
+
+count_table <- species_asv %>%
+    select(species, region, n_genomes, n_asv, n_rrn) %>%
+    group_by(species) %>%
+    mutate(n_genomes = max(n_genomes),
+           n_rrn = max(n_rrn)) %>%
+    ungroup() %>%
+    pivot_wider(names_from = region, values_from = n_asv) %>%
+    arrange(species)
+
+
+# See also kableExtra
+count_table %>%
+    arrange(desc(n_genomes)) %>%
+    top_n(n=10) %>%
+    kable(caption = "Ten most commonly sequence species",
+          digits = 2)
+```
+
+    ## Selecting by v45
+
+| species                       | n_genomes | n_rrn |  v19 | v34 |  v4 | v45 |
+|:------------------------------|----------:|------:|-----:|----:|----:|----:|
+| Escherichia coli              |       958 |  7.02 | 1013 | 255 | 181 | 229 |
+| Salmonella enterica           |       781 |  6.99 |  937 | 231 | 149 | 205 |
+| Staphylococcus aureus         |       452 |  5.52 |  423 |  97 |  52 |  87 |
+| Klebsiella pneumoniae         |       381 |  8.00 |  548 | 194 | 100 | 137 |
+| Bacillus subtilis             |       109 |  9.79 |  241 |  60 |  27 |  37 |
+| Lactiplantibacillus plantarum |        98 |  4.99 |  151 |  40 |  24 |  36 |
+| Bacillus velezensis           |        94 |  8.68 |  228 |  44 |  31 |  39 |
+| Bacillus cereus               |        56 | 13.61 |  286 |  90 |  55 |  68 |
+| Bacillus anthracis            |        54 | 10.93 |  146 |  53 |  36 |  41 |
+| Bacillus thuringiensis        |        50 | 13.44 |  277 |  72 |  40 |  60 |
+
+Ten most commonly sequence species
 
 ### Conclusion
 

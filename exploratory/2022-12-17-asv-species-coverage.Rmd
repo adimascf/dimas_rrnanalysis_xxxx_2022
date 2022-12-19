@@ -13,6 +13,7 @@ editor_options:
 ```{r, message=FALSE}
 library(tidyverse)
 library(here)
+library(knitr)
 
 metadata <- read_tsv(here("data/references/genome_id_taxonomy.tsv"),
                      col_types = cols(.default = col_character())) %>%
@@ -40,9 +41,10 @@ We have previously seen that the number of ASVs per copy of the rRNA gene is abo
 # each facet represent a different region
 
 species_asv <- metadata_asv %>%
-    select(genome_id, species, region, asv) %>%
+    select(genome_id, species, region, asv, count) %>%
     group_by(region, species) %>%
     summarize(n_genomes = n_distinct(genome_id), n_asv = n_distinct(asv),
+              n_rrn = sum(count) / n_genomes,
               asv_rate = n_asv/n_genomes,
               .groups = "drop")
 
@@ -65,6 +67,28 @@ species_asv %>%
 ```
 
 
+```{r}
+# species name, number of genomes, average number of rrns, number of ASVs 
+# across genomes for each region of 16S rRNA gene.
+
+count_table <- species_asv %>%
+    select(species, region, n_genomes, n_asv, n_rrn) %>%
+    group_by(species) %>%
+    mutate(n_genomes = max(n_genomes),
+           n_rrn = max(n_rrn)) %>%
+    ungroup() %>%
+    pivot_wider(names_from = region, values_from = n_asv) %>%
+    arrange(species)
+
+
+# See also kableExtra
+count_table %>%
+    arrange(desc(n_genomes)) %>%
+    top_n(n=10) %>%
+    kable(caption = "Ten most commonly sequence species",
+          digits = 2)
+
+```
 ### Conclusion
 
 * V1-V9 continues to add significant number of ASVs as more genomes are sampled from a species
