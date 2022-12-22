@@ -80,3 +80,9 @@ exploratory/2022-12-17-asv-species-coverage.md : exploratory/2022-12-17-asv-spec
 												data/processed/rrnDB.count_tibble
 	R -e "library(rmarkdown); render('exploratory/2022-12-17-asv-species-coverage.Rmd')"
 
+
+
+exploratory/2022-12-22-asv-taxa-overlap.md : exploratory/2022-12-22-asv-taxa-overlap.Rmd\
+												data/references/genome_id_taxonomy.tsv\
+												data/processed/rrnDB.count_tibble
+	R -e "library(rmarkdown); render('exploratory/2022-12-22-asv-taxa-overlap.Rmd')"
