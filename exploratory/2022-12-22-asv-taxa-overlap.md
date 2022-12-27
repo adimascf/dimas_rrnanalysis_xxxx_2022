@@ -146,4 +146,4 @@ summary_overlap_data %>%
 
 - Sub region are less specific at every taxonomic rank than full-length
   sequences. Still full-length has 3.6% overlap whereas the sub-region
-  are between 8.7 and 12.5% overlap
+  are between 10% and 15% overlap
