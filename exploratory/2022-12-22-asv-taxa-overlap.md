@@ -40,8 +40,43 @@ we can control for relatedness in a future episode, but for today, I
 want to answer this question for any two taxa from the same rank.
 
 ``` r
+# set RNG seed
+set.seed(19769620)
+threshold <- 3
+# metadata_asv - species - genome_id
+subsample_species <- metadata_asv %>%
+    select(genome_id, species) %>%
+# return the distinct/unique rows
+    distinct() %>%
+# group_by species
+    group_by(species) %>%
+# slice_sample on each species for N genomes
+    slice_sample(n=threshold, replace = T) %>%
+    distinct() %>%
+    ungroup()
+
+good_species <- subsample_species %>%
+# count number of genomes in each species
+    count(species) %>%
+# return species that have N genomes / filter out species with fewer
+    filter(n == threshold) %>%
+    select(species)
+
+# going back to original list of species/genomes and return the genome_ids
+# from species with N genomes
+
+subsampled_genomes <- inner_join(subsample_species, good_species,
+                                 by="species") %>%
+    select(genome_id)
+
+
+
+
+
+
 # metadata_asv - input data
-overlap_data <- metadata_asv %>%
+overlap_data <- inner_join(metadata_asv, subsampled_genomes,
+                           by="genome_id") %>%
 # - focus on taxonomic ranks - kingdom to species, asv, and region
     select(-genome_id, -count, -strain) %>%
 # - make data frame tidy
@@ -86,10 +121,10 @@ overlap_data %>%
 
 | region | rank    |   overlap |
 |:-------|:--------|----------:|
-| v19    | species |  3.629671 |
-| v34    | species |  8.721368 |
-| v4     | species | 12.475182 |
-| v45    | species |  9.904632 |
+| v19    | species |  1.050000 |
+| v34    | species |  5.809641 |
+| v4     | species | 11.914894 |
+| v45    | species |  8.650519 |
 
 ### Conclusion
 

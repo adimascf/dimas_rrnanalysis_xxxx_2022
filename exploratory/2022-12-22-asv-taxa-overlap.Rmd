@@ -6,7 +6,7 @@ output:
     github_document:
         html_preview: false
 editor_options: 
-  chunk_output_type: inline
+  chunk_output_type: console
 ---
 
 
@@ -38,9 +38,43 @@ Today, I want to ask an equally important question: If I have an ASV, what is th
 
 
 ```{r}
+# set RNG seed
+set.seed(19769620)
+threshold <- 3
+# metadata_asv - species - genome_id
+subsample_species <- metadata_asv %>%
+    select(genome_id, species) %>%
+# return the distinct/unique rows
+    distinct() %>%
+# group_by species
+    group_by(species) %>%
+# slice_sample on each species for N genomes
+    slice_sample(n=threshold, replace = T) %>%
+    distinct() %>%
+    ungroup()
+
+good_species <- subsample_species %>%
+# count number of genomes in each species
+    count(species) %>%
+# return species that have N genomes / filter out species with fewer
+    filter(n == threshold) %>%
+    select(species)
+
+# going back to original list of species/genomes and return the genome_ids
+# from species with N genomes
+
+subsampled_genomes <- inner_join(subsample_species, good_species,
+                                 by="species") %>%
+    select(genome_id)
+
+
+
+
+
 
 # metadata_asv - input data
-overlap_data <- metadata_asv %>%
+overlap_data <- inner_join(metadata_asv, subsampled_genomes,
+                           by="genome_id") %>%
 # - focus on taxonomic ranks - kingdom to species, asv, and region
     select(-genome_id, -count, -strain) %>%
 # - make data frame tidy
@@ -77,8 +111,6 @@ overlap_data %>%
 overlap_data %>%
     filter(rank == "species") %>%
     kable()
-
-
 
 ```
 
