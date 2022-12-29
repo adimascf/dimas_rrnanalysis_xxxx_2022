@@ -86,8 +86,3 @@ exploratory/2022-12-22-asv-taxa-overlap.md : exploratory/2022-12-22-asv-taxa-ove
 												data/references/genome_id_taxonomy.tsv\
 												data/processed/rrnDB.count_tibble
 	R -e "library(rmarkdown); render('exploratory/2022-12-22-asv-taxa-overlap.Rmd')"
-
-exploratory/2022-12-28-dominance-commoness-of-asvs.md : exploratory/2022-12-28-dominance-commoness-of-asvs.Rmd\
-												data/references/genome_id_taxonomy.tsv\
-                                                                                                data/processed/rrnDB.count_tibble
-	R -e "library(rmarkdown); render('exploratory/2022-12-28-dominance-commoness-of-asvs.Rmd')"
